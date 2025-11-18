@@ -1,4 +1,4 @@
-class EkoOptions {
+class FlutterJitterOptions {
   final String scheme;
   final String host;
   final String port;
@@ -8,7 +8,7 @@ class EkoOptions {
   final String privatePrefix;
   final bool usePrefix;
 
-  EkoOptions({
+  FlutterJitterOptions({
     required this.scheme,
     required this.host,
     required this.port,

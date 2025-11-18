@@ -1,24 +1,35 @@
 import 'dart:convert';
 
-import 'package:eko/eko_options.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:flutter_jitter/flutter_jitter_options.dart';
 
 abstract class ReverbService {
   Future<String?> authenticate(String socketId, String channelName);
-  void subscribe(String channelName, String? broadcastAuthToken, {bool isPrivate = false});
-  void listen(void Function(dynamic) onData, String channelName, {bool isPrivate = false});
+
+  void subscribe(
+    String channelName,
+    String? broadcastAuthToken, {
+    bool isPrivate = false,
+  });
+
+  void listen(
+    void Function(dynamic) onData,
+    String channelName, {
+    bool isPrivate = false,
+  });
+
   void close();
 }
 
-class Eko implements ReverbService {
+class FlutterJitter implements ReverbService {
   late final WebSocketChannel _channel;
-  final EkoOptions options;
+  final FlutterJitterOptions options;
   final Logger _logger = Logger();
 
-  Eko({required this.options}) {
+  FlutterJitter({required this.options}) {
     try {
       final wsUrl = _constructWebSocketUrl();
       _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
@@ -33,11 +44,18 @@ class Eko implements ReverbService {
   }
 
   @override
-  void subscribe(String channelName, String? broadcastAuthToken, {bool isPrivate = false}) {
+  void subscribe(
+    String channelName,
+    String? broadcastAuthToken, {
+    bool isPrivate = false,
+  }) {
     try {
       final subscription = {
         "event": "pusher:subscribe",
-        "data": isPrivate ? {"channel": channelName, "auth": broadcastAuthToken} : {"channel": channelName},
+        "data":
+            isPrivate
+                ? {"channel": channelName, "auth": broadcastAuthToken}
+                : {"channel": channelName},
       };
       _channel.sink.add(jsonEncode(subscription));
     } catch (e) {
@@ -47,10 +65,15 @@ class Eko implements ReverbService {
   }
 
   @override
-  void listen(void Function(dynamic) onData, String channelName, {bool isPrivate = false}) {
+  void listen(
+    void Function(dynamic) onData,
+    String channelName, {
+    bool isPrivate = false,
+  }) {
     try {
       final channelPrefix = options.usePrefix ? options.privatePrefix : '';
-      final fullChannelName = isPrivate ? '$channelPrefix$channelName' : channelName;
+      final fullChannelName =
+          isPrivate ? '$channelPrefix$channelName' : channelName;
       subscribe(channelName, null, isPrivate: isPrivate);
       _channel.stream.listen(
         (message) async {
@@ -108,7 +131,11 @@ class Eko implements ReverbService {
 
       final response = await (http.Client()).post(
         Uri.parse(options.authUrl!),
-        headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json', 'Accept': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         body: jsonEncode({'socket_id': socketId, 'channel_name': channelName}),
       );
 
@@ -140,6 +167,9 @@ class WebsocketResponse {
   WebsocketResponse({required this.event, this.data});
 
   factory WebsocketResponse.fromJson(Map<String, dynamic> json) {
-    return WebsocketResponse(event: json['event'], data: json['data'] != null ? jsonDecode(json['data']) : null);
+    return WebsocketResponse(
+      event: json['event'],
+      data: json['data'] != null ? jsonDecode(json['data']) : null,
+    );
   }
 }

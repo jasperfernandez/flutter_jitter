@@ -1,4 +1,4 @@
-# 📡 Eko a Flutter Laravel Reverb Client
+# 📡 Jitter a Flutter Laravel Reverb WebSocket Client
 
 ## 🚀 Features
 
@@ -10,11 +10,11 @@
 
 ## 📦 Installation
 
-Add **eko** to your `pubspec.yaml`:
+Add **flutter_jitter** to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  eko: ^0.0.1
+  flutter_jitter: ^0.0.1
 ```
 
 and run:
@@ -26,7 +26,7 @@ flutter pub get
 or install it from the command line:
 
 ```sh
-flutter pub add eko
+flutter pub add flutter_jitter
 ```
 
 ## 🎯 Usage
@@ -34,9 +34,9 @@ flutter pub add eko
 ### 1️⃣ **Initialize the WebSocket Client**
 
 ```dart
-import 'package:eko/eko.dart';
+import 'package:flutter_jitter/flutter_jitter.dart';
 
-final options = EkoOptions(
+final options = FlutterJitterOptions(
   scheme: "ws",
   host: "localhost",
   port: "8080",
@@ -46,19 +46,19 @@ final options = EkoOptions(
   privatePrefix: "private-", // default: "private-"
 );
 
-final eko = Eko(options: options);
+final jitter = FlutterJitter(options: options);
 ```
 
 ### 2️⃣ **Listen for Messages**
 
 ```dart
 // Public channel
-eko.listen((message) {
+jitter.listen((message) {
   print("Received: ${message.event}, Data: ${message.data}");
 }, "public-channel", isPrivate: false);
 
 // Private channel
-eko.listen((message) {
+jitter.listen((message) {
 print("Received: ${message.event}, Data: ${message.data}");
 }, "public-channel", isPrivate: true);
 ```
@@ -66,7 +66,7 @@ print("Received: ${message.event}, Data: ${message.data}");
 ### 3️⃣ **Close Connection**
 
 ```dart
-eko.close();
+jitter.close();
 ```
 
 ## 🧪 Testing
@@ -89,10 +89,10 @@ flutter test
 | `authToken`     | String? | Token for authentication requests (`sanctum` or similar) |
 | `privatePrefix` | String  | Prefix for private channels (default: `private-`)        |
 
-### EkoOptions example
+### FlutterJitterOptions example
 
 ```dart
-class EkoOptions {
+class FlutterJitterOptions {
   final String scheme;
   final String host;
   final String port;
@@ -102,7 +102,7 @@ class EkoOptions {
   final String privatePrefix;
   final bool usePrefix;
 
-  EkoOptions({
+  FlutterJitterOptions({
     required this.scheme,
     required this.host,
     required this.port,

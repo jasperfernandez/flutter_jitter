@@ -1,7 +1,7 @@
-name: eko
-description: 'Eko for connecting your flutter to laravel reverb.'
+name: flutter_jitter
+description: 'A Laravel Reverb WebSocket client for Flutter.'
 version: 0.0.1
-repository: 'https://github.com/jasperfernandez/eko'
+repository: 'https://github.com/jasperfernandez/flutter_jitter'
 
 environment:
   sdk: ^3.7.0

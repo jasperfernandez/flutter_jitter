@@ -1,25 +1,25 @@
-import 'package:eko/eko_options.dart';
+import 'package:flutter_jitter/flutter_jitter_options.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:eko/eko.dart';
+import 'package:flutter_jitter/flutter_jitter.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'eko_test.mocks.dart';
+import 'flutter_jitter_test.mocks.dart';
 
 @GenerateMocks([http.Client, WebSocketChannel])
 void main() {
-  group('FlutterReverb', () {
+  group('FlutterJitter', () {
     late MockClient mockHttpClient;
     late MockWebSocketChannel mockWebSocket;
-    late Eko eko;
+    late FlutterJitter jitter;
 
     setUp(() {
       mockHttpClient = MockClient();
       mockWebSocket = MockWebSocketChannel();
 
-      final options = EkoOptions(
+      final options = FlutterJitterOptions(
         scheme: 'ws',
         host: 'localhost',
         port: '6001',
@@ -28,14 +28,14 @@ void main() {
         authUrl: 'https://example.com/broadcasting/auth',
       );
 
-      eko = Eko(options: options);
+      jitter = FlutterJitter(options: options);
     });
 
     test('should construct WebSocket URL correctly', () {
-      expect(eko.options.scheme, 'ws');
-      expect(eko.options.host, 'localhost');
-      expect(eko.options.port, '6001');
-      expect(eko.options.appKey, 'testKey');
+      expect(jitter.options.scheme, 'ws');
+      expect(jitter.options.host, 'localhost');
+      expect(jitter.options.port, '6001');
+      expect(jitter.options.appKey, 'testKey');
     });
   });
 }
