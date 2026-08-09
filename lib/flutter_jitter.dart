@@ -31,7 +31,17 @@ class FlutterJitter implements ReverbService {
 
   FlutterJitter({required this.options}) {
     try {
-      _channel = WebSocketChannel.connect(Uri.parse(websocketUrl));
+    final url = websocketUrl;
+
+    _logger.i('========================================');
+    _logger.i('WebSocket URL: $url');
+    _logger.i('WebSocket scheme: ${options.scheme}');
+    _logger.i('WebSocket host: ${options.host}');
+    _logger.i('WebSocket port: ${options.port}');
+    _logger.i('WebSocket app key: ${options.appKey}');
+    _logger.i('========================================');
+
+    _channel = WebSocketChannel.connect(Uri.parse(url));
     } catch (e) {
       _logger.e('Failed to connect to WebSocket: $e');
       rethrow;
