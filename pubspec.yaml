@@ -1,6 +1,6 @@
 name: flutter_jitter
 description: 'A Laravel Reverb WebSocket client for Flutter.'
-version: 0.0.2
+version: 0.0.3
 repository: 'https://github.com/jasperfernandez/flutter_jitter'
 
 environment:
