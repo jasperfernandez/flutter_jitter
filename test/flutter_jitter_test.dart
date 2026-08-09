@@ -37,5 +37,35 @@ void main() {
       expect(jitter.options.port, '6001');
       expect(jitter.options.appKey, 'testKey');
     });
+
+    test('normalizes https scheme to wss', () {
+      final url = jitter.buildWebSocketUrl(
+        scheme: 'https',
+        host: 'flowocr.laravel.cloud',
+        port: '',
+        appKey: '3iEAwEpactOHTgEJZslY',
+      );
+      expect(url, 'wss://flowocr.laravel.cloud/app/3iEAwEpactOHTgEJZslY');
+    });
+
+    test('normalizes http scheme to ws', () {
+      final url = jitter.buildWebSocketUrl(
+        scheme: 'http',
+        host: 'localhost',
+        port: '8080',
+        appKey: 'testKey',
+      );
+      expect(url, 'ws://localhost:8080/app/testKey');
+    });
+
+    test('strips trailing hash fragment from appKey', () {
+      final url = jitter.buildWebSocketUrl(
+        scheme: 'https',
+        host: 'flowocr.laravel.cloud',
+        port: '',
+        appKey: '3iEAwEpactOHTgEJZslY#',
+      );
+      expect(url, 'wss://flowocr.laravel.cloud/app/3iEAwEpactOHTgEJZslY');
+    });
   });
 }

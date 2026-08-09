@@ -31,16 +31,34 @@ class FlutterJitter implements ReverbService {
 
   FlutterJitter({required this.options}) {
     try {
-      final wsUrl = _constructWebSocketUrl();
-      _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
+      _channel = WebSocketChannel.connect(Uri.parse(websocketUrl));
     } catch (e) {
       _logger.e('Failed to connect to WebSocket: $e');
       rethrow;
     }
   }
 
-  String _constructWebSocketUrl() {
-    return '${options.scheme}://${options.host}:${options.port}/app/${options.appKey}';
+  String get websocketUrl => buildWebSocketUrl();
+
+  String buildWebSocketUrl({
+    String? scheme,
+    String? host,
+    String? port,
+    String? appKey,
+  }) {
+    var wsScheme = (scheme ?? options.scheme).toLowerCase();
+    if (wsScheme == 'http') {
+      wsScheme = 'ws';
+    } else if (wsScheme == 'https') {
+      wsScheme = 'wss';
+    }
+
+    final wsHost = host ?? options.host;
+    final wsPort = port ?? options.port;
+    final wsAppKey = (appKey ?? options.appKey).split('#').first;
+
+    final authority = wsPort.isEmpty ? wsHost : '$wsHost:$wsPort';
+    return '$wsScheme://$authority/app/$wsAppKey';
   }
 
   @override
